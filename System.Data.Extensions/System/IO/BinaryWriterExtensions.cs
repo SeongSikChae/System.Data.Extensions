@@ -10,7 +10,7 @@
 		/// <summary>
 		/// BinaryWriter 에 IRow 데이터를 기록합니다.
 		/// </summary>
-		public static void Write(this BinaryWriter writer, DefaultRow row)
+		public static void Write(this BinaryWriter writer, IRow row)
 		{
 			writer.Write(row.ColumnCount);
 			foreach (string columnName in row.ColumnNames)
