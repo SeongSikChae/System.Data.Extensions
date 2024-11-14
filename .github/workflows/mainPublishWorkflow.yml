@@ -35,7 +35,7 @@ jobs:
       uses: bbonkr/get-version-action@v1
       id: project_version
       with:
-        project: "./System.Data.Extension/System.Data.Extensions.csproj" 
+        project: "./System.Data.Extensions/System.Data.Extensions.csproj" 
 
     - name: Create Git Tag
       id: create_tag
@@ -59,7 +59,7 @@ jobs:
     - name: Upload to GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        files: ./System.Data.Extension/bin/Release/System.Data.Extension.${{ steps.project_version.outputs.version }}.nupkg
+        files: ./System.Data.Extensions/bin/Release/System.Data.Extensions.${{ steps.project_version.outputs.version }}.nupkg
         tag_name: ${{ env.tag_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
