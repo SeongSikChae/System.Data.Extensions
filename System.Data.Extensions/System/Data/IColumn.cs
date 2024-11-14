@@ -797,6 +797,9 @@
 		}
 	}
 
+	/// <summary>
+	/// <see cref="System.Net.IPAddress"/> 형식의 Column 구현체
+	/// </summary>
 	public sealed class IPAddressColumn(IPAddress address) : IColumn<IPAddress>
 	{
 		/// <summary>
