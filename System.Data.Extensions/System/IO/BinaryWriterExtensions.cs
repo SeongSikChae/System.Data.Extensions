@@ -3,24 +3,10 @@
 	using Data;
 
 	/// <summary>
-	/// BinaryWriter에 IRow, IColumn 을 기록하는 확장기능
+	/// BinaryWriter에 IColumn 을 기록하는 확장기능
 	/// </summary>
 	public static class BinaryWriterExtensions
 	{
-		/// <summary>
-		/// BinaryWriter 에 IRow 데이터를 기록합니다.
-		/// </summary>
-		public static void Write(this BinaryWriter writer, IRow row)
-		{
-			writer.Write(row.ColumnCount);
-			foreach (string columnName in row.ColumnNames)
-			{
-				IColumn column = row.GetColumn(columnName);
-				writer.WriteUTF8(columnName);
-				writer.Write(column);
-			}
-		}
-
 		/// <summary>
 		/// BinaryWriter 에 IColumn 데이터를 기록합니다.
 		/// </summary>
@@ -69,6 +55,9 @@
 					writer.WriteUTF8(col.Value);
 					break;
 				case IPAddressColumn col:
+					writer.Write(col.Value);
+					break;
+				case BytesColumn col:
 					writer.Write(col.Value);
 					break;
 				case NullColumn:

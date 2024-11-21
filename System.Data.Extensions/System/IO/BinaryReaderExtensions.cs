@@ -3,26 +3,10 @@
 	using Data;
 
 	/// <summary>
-	/// BinaryReader 로 부터 IRow, IColumn 을 읽어오는 확장기능
+	/// BinaryReader 로 부터 IColumn 을 읽어오는 확장기능
 	/// </summary>
 	public static class BinaryReaderExtensions
 	{
-		/// <summary>
-		/// BinaryReader 로 부터 IRow 를 읽어옵니다.
-		/// </summary>
-		public static T ReadRow<T>(this BinaryReader reader) where T : IRow, new()
-		{
-			T row = new();
-			int columnCount = reader.ReadInt32();
-			for (int index = 0; index <columnCount; index++)
-			{
-				string columnName = reader.ReadUTF8();
-				IColumn column = reader.ReadColumn();
-				row.SetColumn(columnName, column);
-			}
-			return row;
-		}
-
 		/// <summary>
 		/// BinaryReader 로 부터 IColumn 을 읽어옵니다.
 		/// </summary>

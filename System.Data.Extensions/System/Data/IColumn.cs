@@ -65,6 +65,10 @@
 		/// </summary>
 		IPAddress,
 		/// <summary>
+		/// byte[] 형식의 Column 유형
+		/// </summary>
+		Bytes,
+		/// <summary>
 		/// NULL 형식 Column 유형
 		/// </summary>
 		NULL = int.MaxValue
@@ -825,6 +829,27 @@
 			IPAddressColumn f = (IPAddressColumn)other;
 			return new BigInteger(Value.GetAddressBytes()).CompareTo(new BigInteger(f.Value.GetAddressBytes()));
 		}
+	}
+
+	/// <summary>
+	/// byte[] 형식의 Column Abstract
+	/// </summary>
+	public abstract class BytesColumn : IColumn<byte[]>
+	{
+		/// <summary>
+		/// <inheritdoc/>
+		/// </summary>
+		public abstract byte[] Value { get; }
+
+		/// <summary>
+		/// <inheritdoc/>
+		/// </summary>
+		public ColumnType Type => ColumnType.Bytes;
+
+		/// <summary>
+		/// <inheritdoc/>
+		/// </summary>
+		public abstract int CompareTo(IColumn? other);
 	}
 
 	/// <summary>
