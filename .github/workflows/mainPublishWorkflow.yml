@@ -22,8 +22,11 @@ jobs:
     - name: Restore
       run: dotnet restore System.Data.Extensions/System.Data.Extensions.csproj
 
+    - name: Build
+      run: dotnet build System.Data.Extensions/System.Data.Extensions.csproj -c Release --no-restore
+
     - name: Pack
-      run: dotnet pack System.Data.Extensions/System.Data.Extensions.csproj -c Release --no-restore -o ./artifacts
+      run: dotnet pack System.Data.Extensions/System.Data.Extensions.csproj -c Release --no-build --no-restore -o ./artifacts
 
     - name: Get Project Version
       uses: bbonkr/get-version-action@v1
