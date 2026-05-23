@@ -1,17 +1,14 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
-name: .NET
+name: Main Publish
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+
+permissions:
+  contents: write
 
 jobs:
-  build:
-
+  publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,25 +17,21 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
 
-    - name: Restore dependencies
-      run: dotnet restore
+    - name: Restore
+      run: dotnet restore System.Data.Extensions/System.Data.Extensions.csproj
 
-    - name: Build
-      run: dotnet build --no-restore -c Release
-
-    - name: Test
-      run: dotnet test --no-build -c Release --verbosity normal
+    - name: Pack
+      run: dotnet pack System.Data.Extensions/System.Data.Extensions.csproj -c Release --no-restore -o ./artifacts
 
     - name: Get Project Version
       uses: bbonkr/get-version-action@v1
       id: project_version
       with:
-        project: "./System.Data.Extensions/System.Data.Extensions.csproj" 
+        project: "./System.Data.Extensions/System.Data.Extensions.csproj"
 
     - name: Create Git Tag
-      id: create_tag
       run: |
         TAG_NAME=v${{ steps.project_version.outputs.version }}
         git tag $TAG_NAME -d || true
@@ -59,7 +52,9 @@ jobs:
     - name: Upload to GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        files: ./System.Data.Extensions/bin/Release/System.Data.Extensions.${{ steps.project_version.outputs.version }}.nupkg
+        files: |
+          ./artifacts/*.nupkg
+          ./artifacts/*.snupkg
         tag_name: ${{ env.tag_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

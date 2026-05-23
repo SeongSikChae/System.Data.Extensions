@@ -6,28 +6,28 @@
 	/// <summary>
 	/// Stream 으로 부터 DefaultRow 를 읽어오는 Reader
 	/// </summary>
-	public sealed class DefaultRowReader(Stream input, Encoding encoding, bool leaveOpen, ByteOrder byteOrder) : IRowReader<DefaultRow>
+	public sealed class DefaultRowReader(Stream input, Encoding encoding, bool leaveOpen, Endian endian) : IRowReader<DefaultRow>
 	{
 		/// <summary>
 		/// 백업 저장소가 없는 DefaultRowReader를 지정합니다.
 		/// </summary>
 		public static readonly DefaultRowReader Null = new DefaultRowReader();
 
-		private readonly BinaryReader reader = new BinaryReaderV2(input, encoding, leaveOpen, byteOrder);
+		private readonly BinaryReader reader = new EndianBinaryReader(input, encoding, leaveOpen, endian);
 
 		/// <summary>
-		/// 지정된 스트림 및 문자 인코딩, ByteOrder 기반으로 DefaultRowReader 를 초기화 합니다.
+		/// 지정된 스트림 및 문자 인코딩, Endian 기반으로 DefaultRowReader 를 초기화 합니다.
 		/// </summary>
-		public DefaultRowReader(Stream input, Encoding encoding, ByteOrder byteOrder) : this(input, encoding, false, byteOrder) { }
+		public DefaultRowReader(Stream input, Encoding encoding, Endian endian) : this(input, encoding, false, endian) { }
 
 		/// <summary>
-		/// 지정된 스트림 및 UTF-8 인코딩, ByteOrder 기반으로 DefaultRowReader 를 초기화 합니다.
+		/// 지정된 스트림 및 UTF-8 인코딩, Endian 기반으로 DefaultRowReader 를 초기화 합니다.
 		/// </summary>
 		/// <param name="input"></param>
-		/// <param name="byteOrder"></param>
-		public DefaultRowReader(Stream input, ByteOrder byteOrder) : this(input, Encoding.UTF8, false, byteOrder) { }
+		/// <param name="Endian"></param>
+		public DefaultRowReader(Stream input, Endian endian) : this(input, Encoding.UTF8, false, endian) { }
 
-		private DefaultRowReader() : this(Stream.Null, ByteOrder.LittleEndian) { }
+		private DefaultRowReader() : this(Stream.Null, Endian.LittleEndian) { }
 
 		/// <summary>
 		/// <inheritdoc/>

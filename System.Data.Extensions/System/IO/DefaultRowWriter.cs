@@ -14,12 +14,12 @@
 		public static readonly DefaultRowWriter Null = new DefaultRowWriter();
 
 		/// <summary>
-		/// 지정된 스트림 및 문자 인코딩, ByteOrder 기반으로 DefaultRowWriter 를 초기화 하고 필요에 따라 스트림을 열어 둡니다.
+		/// 지정된 스트림 및 문자 인코딩, endian 기반으로 DefaultRowWriter 를 초기화 하고 필요에 따라 스트림을 열어 둡니다.
 		/// </summary>
-		public DefaultRowWriter(Stream output, Encoding encoding, bool leaveOpen, ByteOrder byteOrder)
+		public DefaultRowWriter(Stream output, Encoding encoding, bool leaveOpen, Endian endian)
 		{
-			writer = new BinaryWriterV2(output, encoding, leaveOpen, byteOrder);
-			inmemoryWriter = new BinaryWriterV2(memory, encoding, true, byteOrder);
+			writer = new EndianBinaryWriter(output, encoding, leaveOpen, endian);
+			inmemoryWriter = new EndianBinaryWriter(memory, encoding, true, endian);
 		}
 
 		private readonly BinaryWriter writer;
@@ -27,18 +27,18 @@
 		private readonly BinaryWriter inmemoryWriter;
 
 		/// <summary>
-		/// 지정된 스트림 및 문자 인코딩, ByteOrder 기반으로 DefaultRowWriter 를 초기화합니다.
+		/// 지정된 스트림 및 문자 인코딩, endian 기반으로 DefaultRowWriter 를 초기화합니다.
 		/// </summary>
-		public DefaultRowWriter(Stream output, Encoding encoding, ByteOrder byteOrder) : this(output, encoding, false, byteOrder) { }
+		public DefaultRowWriter(Stream output, Encoding encoding, Endian endian) : this(output, encoding, false, endian) { }
 
 		/// <summary>
-		/// 지정된 스트림 및 UTF-8 인코딩, ByteOrder 기반으로 DefaultRowWriter 를 초기화합니다.
+		/// 지정된 스트림 및 UTF-8 인코딩, endian 기반으로 DefaultRowWriter 를 초기화합니다.
 		/// </summary>
 		/// <param name="output"></param>
-		/// <param name="byteOrder"></param>
-		public DefaultRowWriter(Stream output, ByteOrder byteOrder) : this(output, Encoding.UTF8, false, byteOrder) { }
+		/// <param name="endian"></param>
+		public DefaultRowWriter(Stream output, Endian endian) : this(output, Encoding.UTF8, false, endian) { }
 
-		private DefaultRowWriter() : this(Stream.Null, ByteOrder.LittleEndian) { }
+		private DefaultRowWriter() : this(Stream.Null, Endian.LittleEndian) { }
 
 		/// <summary>
 		/// <inheritdoc/>
