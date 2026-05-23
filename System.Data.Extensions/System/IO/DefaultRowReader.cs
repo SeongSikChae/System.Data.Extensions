@@ -24,7 +24,7 @@
 		/// 지정된 스트림 및 UTF-8 인코딩, Endian 기반으로 DefaultRowReader 를 초기화 합니다.
 		/// </summary>
 		/// <param name="input"></param>
-		/// <param name="Endian"></param>
+		/// <param name="endian"></param>
 		public DefaultRowReader(Stream input, Endian endian) : this(input, Encoding.UTF8, false, endian) { }
 
 		private DefaultRowReader() : this(Stream.Null, Endian.LittleEndian) { }
@@ -56,8 +56,11 @@
 				for (int index = 0; index < columnCount; index++)
 				{
 					string columnName = reader.ReadUTF8();
-					IColumn column = reader.ReadColumn();
-					row.SetColumn(columnName, column);
+					IColumn? column = reader.ReadColumn();
+					if (column is not null)
+						row.SetColumn(columnName, column);
+					else
+						row.SetColumn(columnName, new NullColumn());
 				}
 				return row;
 			} 

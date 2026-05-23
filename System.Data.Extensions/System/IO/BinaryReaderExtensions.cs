@@ -10,7 +10,7 @@
 		/// <summary>
 		/// BinaryReader 로 부터 IColumn 을 읽어옵니다.
 		/// </summary>
-		public static IColumn ReadColumn(this BinaryReader reader)
+		public static IColumn? ReadColumn(this BinaryReader reader)
 		{
 			ColumnType type = (ColumnType)reader.ReadInt32();
 			switch (type)
@@ -43,8 +43,10 @@
 					return new StringColumn(reader.ReadUTF8());
 				case ColumnType.IPAddress:
 					return new IPAddressColumn(reader.ReadIPAddress());
-				default:
+				case ColumnType.NULL:
 					return new NullColumn();
+				default:
+					return null;
 			}
 		}
 	}

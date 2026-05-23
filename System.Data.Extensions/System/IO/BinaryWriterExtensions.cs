@@ -60,8 +60,7 @@
 				case BytesColumn col:
 					writer.Write(col.Value);
 					break;
-				case NullColumn:
-					writer.Write('\0');
+				case NullColumn col:
 					break;
 			}
 		}

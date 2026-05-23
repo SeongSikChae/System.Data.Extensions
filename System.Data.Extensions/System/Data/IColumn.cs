@@ -69,9 +69,9 @@
 		/// </summary>
 		Bytes,
 		/// <summary>
-		/// NULL 형식 Column 유형
+		/// NULL 값이 기록 되었을 때 반환 목적의 Column 유형
 		/// </summary>
-		NULL = int.MaxValue
+		NULL = int.MaxValue,
 	}
 
 	/// <summary>
@@ -83,7 +83,8 @@
 		/// Column 구현체의 유형이 무엇인지 가져오는 속성
 		/// </summary>
 		ColumnType Type { get; }
-	}
+
+    }
 
 	/// <summary>
 	/// <inheritdoc/>
@@ -853,54 +854,23 @@
 	}
 
 	/// <summary>
-	/// 존재하지 않는 Column에 대한 구현체
+	/// NUll 형식의 Column
 	/// </summary>
-	public sealed class NullColumn : IColumn<object?>
-	{
-		/// <summary>
-		/// <inheritdoc/>
-		/// </summary>
-		public object? Value => null;
+    public sealed class NullColumn : IColumn
+    {
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public ColumnType Type => ColumnType.NULL;
 
-		/// <summary>
-		/// <inheritdoc/>
-		/// </summary>
-		public ColumnType Type => ColumnType.NULL;
-
-		/// <summary>
-		/// <inheritdoc/>
-		/// </summary>
-		public int CompareTo(IColumn? other)
-		{
-			if (other is null)
-				return 1;
-			return Type.CompareTo(other.Type);
-		}
-
-		/// <summary>
-		/// <inheritdoc/>
-		/// </summary>
-		public override bool Equals(object? obj)
-		{
-			if (obj is not NullColumn)
-				return false;
-			return true;
-		}
-
-		/// <summary>
-		/// <inheritdoc/>
-		/// </summary>
-		public override int GetHashCode()
-		{
-			return HashCode.Combine(Type, Value);
-		}
-
-		/// <summary>
-		/// <inheritdoc/>
-		/// </summary>
-		public override string ToString()
-		{
-			return "null";
-		}
-	}
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public int CompareTo(IColumn? other)
+        {
+			if (ReferenceEquals(this, other))
+				return 0;
+			return -1;
+        }
+    }
 }

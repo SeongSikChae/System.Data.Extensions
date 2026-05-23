@@ -18,11 +18,11 @@
 		/// <summary>
 		/// 대상 Column의 형식을 가져옵니다.
 		/// </summary>
-		ColumnType GetColumnType(string columnName);
+		ColumnType? GetColumnType(string columnName);
 		/// <summary>
 		/// 대상 Column을 가져옵니다. (없으면 null)
 		/// </summary>
-		IColumn GetColumn(string name);
+		IColumn? GetColumn(string columnName);
 		/// <summary>
 		/// 대상 Column을 추가합니다.
 		/// </summary>
@@ -91,6 +91,7 @@
 	public sealed class DefaultRow : IRow
 	{
 		private readonly Dictionary<string, IColumn> columns = new Dictionary<string, IColumn>();
+		private readonly ColumnComparer columnCompare = new ColumnComparer();
 
 		/// <summary>
 		/// <inheritdoc/>
@@ -112,10 +113,10 @@
 			int compare = 0;
 			foreach (string columnName in columns.Keys)
 			{
-				IColumn column = GetColumn(columnName);
-				IColumn otherColumn = other.GetColumn(columnName);
-				compare = column.CompareTo(otherColumn);
-				if (compare != 0)
+                IColumn? column = GetColumn(columnName);
+				IColumn? otherColumn = other.GetColumn(columnName);
+				compare = columnCompare.Compare(column, otherColumn);
+                if (compare != 0)
 					return compare;
 			}
 			return compare;
@@ -124,21 +125,21 @@
 		/// <summary>
 		/// <inheritdoc/>
 		/// </summary>
-		public IColumn GetColumn(string name)
+		public IColumn? GetColumn(string name)
 		{
 			if (!columns.TryGetValue(name, out IColumn? column))
-				return new NullColumn();
+				return null;
 			return column;
 		}
 
 		/// <summary>
 		/// <inheritdoc/>
 		/// </summary>
-		public ColumnType GetColumnType(string columnName)
+		public ColumnType? GetColumnType(string columnName)
 		{
 			IColumn? column = GetColumn(columnName);
 			if (column is null)
-				return ColumnType.NULL;
+				return null;
 			return column.Type;
 		}
 
